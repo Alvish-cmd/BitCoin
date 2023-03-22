@@ -1,0 +1,100 @@
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200;600&family=Open+Sans:wght@300&display=swap");
+
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@200&family=Open+Sans:wght@300&display=swap");
+
+:root {
+  --cx-drgreen: #54a972;
+  --cx-ltgreen: #4bca87;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+.main {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  background-repeat: no-repeat;
+  display: flex;
+}
+
+.image {
+  width: 50%;
+  left: 754px;
+  border-radius: 0px;
+}
+
+.imgHandle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 60px 0 0 0;
+}
+
+.img {
+  width: 80%;
+}
+
+.left {
+  left: 0px;
+}
+
+.right {
+  background: #fff;
+  right: 0px;
+}
+
+.rightContent {
+  padding: 50px;
+  margin: 0 150px 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+
+.formLastName{
+  margin: -83px 183px 0px 0;
+}
+
+.formWelcome {
+  /* Font style */
+  font-family: "Nunito";
+  color: #000000;
+  font-size: 24px;
+}
+
+.formTermstLink {
+  width: 100%;
+  margin: 0 8.6rem 15px -68px;
+}
+
+
+.formRbutton{
+  margin: 0.5rem 0px 14px 23px;
+}
+
+.formRbutton span {
+  font-family: "Nunito";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 33px;
+}
+
+.formAlreadyAccount{
+  margin: 3px 4.5rem 0 0 ;
+}
+.formAlreadyAccount span {
+  width: 100%; 
+}
+
+.formAlreadyAccount a {
+  text-decoration: none;
+  width: 100px;
+
+}
