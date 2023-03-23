@@ -14,20 +14,32 @@ import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { ToastContainer, toast, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { validEmail, validPassword } from "../Login/Regex";
+import { useNavigate } from "react-router-dom";
+import axios, { AxiosResponse,AxiosError } from 'axios';
+
 import "./login.css";
 
 // Logic for Login
-type LoginFormProps = {
-  onSubmit: (email: string, password: string) => void;
-
+interface LoginFormProps {
+  email: string,
+  password: string,
 };
 
-const LoginForm = ({ onSubmit }: LoginFormProps) => {
+
+const LoginForm: React.FC = () => {
+  // const [formData, setFormData] = useState<LoginFormProps>({ email: '', password: '' });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [emailErr, setEmailErr] = useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
+  
 
+  // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  //   // const { name, value } = event.target;
+  //   setFormData({ ...formData, [event.target.name]: event.target.value });
+  //   console.log(formData)
+  // };
+  const navigate = useNavigate();
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (
@@ -35,8 +47,45 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
   ) => {
     event.preventDefault();
   };
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+
+    if (email && password) {
+      try {
+        const config = {
+          email: email,
+          password: password,
+        }
+
+        const response: AxiosResponse = await axios.post('https://coin-a-abhi6284.onrender.com/api/login', config);
+        console.log(response.data); 
+        // console.log(response.data.message);
+        
+        if (response.status === 201) {
+          navigate("/Dashboard");
+        }
+        else{
+          
+        }
+
+      } catch (error) {
+        const err = error as AxiosError
+        console.log(err.response?.data)
+        toast.error(" "+err.response?.data, {
+          transition: Flip,
+          position: "top-center",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+  
+          theme: "dark",
+        });
+        
+      }
+    }
     if (!email && !password) {
       toast.error("Please fill in both Email and Password.", {
         transition: Flip,
@@ -50,24 +99,9 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
 
         theme: "dark",
       });
-      
-      
-    } 
-    else if (!validEmail.test(email)) {
-      
-      toast.error("Please Enter a valid Email", {
-        transition: Flip,
-        position: "top-center",
-        autoClose: 2000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
 
-        theme: "dark",
-      });
-   }
+
+    }
     else if (!email) {
       toast.error("Please fill a Email ", {
         transition: Flip,
@@ -81,7 +115,25 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
 
         theme: "dark",
       });
-    }else if (!password) {
+    }
+
+    else if (!validEmail.test(email)) {
+
+      toast.error("Please Enter a valid Email", {
+        transition: Flip,
+        position: "top-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+
+        theme: "dark",
+      });
+    }
+
+    else if (!password) {
       toast.error("Please fill a password ", {
         transition: Flip,
         position: "top-center",
@@ -95,8 +147,8 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
         theme: "dark",
       });
     }
-    
-    onSubmit(email, password);
+
+
   };
 
   // Login button Material ui custom css
@@ -144,9 +196,8 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
                 <TextField
                   id="outlined-basic"
                   label="Email"
-                  
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => { setEmail(e.target.value) }}
                   variant="outlined"
                   sx={{
                     "& > :not(style)": {
@@ -182,7 +233,7 @@ const LoginForm = ({ onSubmit }: LoginFormProps) => {
                       },
                     }}
                     value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => { setPassword(e.target.value) }}
                     id="outlined-adornment-password"
                     type={showPassword ? "text" : "password"}
                     endAdornment={

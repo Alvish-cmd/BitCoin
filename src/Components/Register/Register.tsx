@@ -1,11 +1,19 @@
 import React, { useState } from "react";
 import Box from "@mui/material/Box";
 import TextField from "@mui/material/TextField";
+import FormControl from "@mui/material/FormControl";
+import InputLabel from "@mui/material/InputLabel";
+import OutlinedInput from "@mui/material/OutlinedInput";
+import InputAdornment from "@mui/material/InputAdornment";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
 import image from "../Login/img/Login_Poster.png"
 import { styled } from "@mui/material/styles";
 import Button, { ButtonProps } from "@mui/material/Button";
 import Checkbox, { CheckboxProps } from '@mui/material/Checkbox';
 import { ToastContainer, toast, Flip } from "react-toastify";
+import { validEmail, validPassword } from "../Login/Regex";
 import "react-toastify/dist/ReactToastify.css";
 import "./Register.css";
 
@@ -20,19 +28,29 @@ type RegisterFormProps = {
   ) => void;
 };
 
+// Register form here
 const RegisterForm :React.FC<RegisterFormProps> = ({ onRegister }) => {
   const [First_name, setFirst_name] = useState("");
   const [Last_name, setLast_name] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [Confi_password, setConfi_password] = useState("");
-  const [isChecked, setIsChecked] = useState(false);
   const [acceptTerms,setAcceptTerms] = useState(false);
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
+
+  const handleMouseDownPassword = (
+    event: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    event.preventDefault();
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    
     event.preventDefault();
     if (!First_name && !Last_name && !email && !password && !Confi_password && !acceptTerms) {
-      toast.error("Please fill All the filed.", {
+      toast.error("Please Fill All the filed.", {
         transition: Flip,
         position: "top-right",
         autoClose: 2000,
@@ -89,6 +107,21 @@ const RegisterForm :React.FC<RegisterFormProps> = ({ onRegister }) => {
         theme: "dark",
       });  
     }
+    else if (!validEmail.test(email)) {
+      
+      toast.error("Please Enter a valid Email", {
+        transition: Flip,
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+
+        theme: "dark",
+      });
+   }
     else if (!password) {
       toast.error("Please Fill Password.", {
         transition: Flip,
@@ -141,7 +174,6 @@ const RegisterForm :React.FC<RegisterFormProps> = ({ onRegister }) => {
     borderRadius: "5px",
     fontWeight: "600",
     height: "40px",
-    // color:'white',
     "&:hover": {
       backgroundColor: "#4BCA87",
     },
@@ -309,24 +341,43 @@ const RegisterForm :React.FC<RegisterFormProps> = ({ onRegister }) => {
                 <Box
                   sx={{
                     "& > :not(style)": {
-                      m: 0,
-                      ml:3,
+                      m: 1,
+                      ml:4,
                       width: "375px",
                       borderRadius: "10px",
                     },
                   }}
 
                 >
-                  <TextField
-                    id="outlined-basic"
-                    label="Password"
-                    variant="outlined"
+                 <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
+                  <InputLabel htmlFor="outlined-adornment-password">
+                    Password
+                  </InputLabel>
+                  <OutlinedInput
+                    sx={{
+                      "& > :not(style)": {
+                        borderRadius: "10px",
+                      },
+                    }}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    sx={{
-                      "& > :not(style)": { my:1, borderRadius: "10px", height: "50px" },
-                    }}
+                    id="outlined-adornment-password"
+                    type={showPassword ? "text" : "password"}
+                    endAdornment={
+                      <InputAdornment position="end">
+                        <IconButton
+                          aria-label="toggle password visibility"
+                          onClick={handleClickShowPassword}
+                          onMouseDown={handleMouseDownPassword}
+                          edge="end"
+                        >
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
+                        </IconButton>
+                      </InputAdornment>
+                    }
+                    label="Password"
                   />
+                </FormControl>
                 </Box>
               </div>
 
@@ -346,6 +397,7 @@ const RegisterForm :React.FC<RegisterFormProps> = ({ onRegister }) => {
                     id="outlined-basic"
                     label="Confirm Password"
                     variant="outlined"
+                    type="password"
                     value={Confi_password}
                     onChange={(e) => setConfi_password(e.target.value)}
                     sx={{
