@@ -13,23 +13,13 @@ import { styled } from "@mui/material/styles";
 import Button, { ButtonProps } from "@mui/material/Button";
 import Checkbox, { CheckboxProps } from '@mui/material/Checkbox';
 import { ToastContainer, toast, Flip } from "react-toastify";
-import { validEmail, validPassword } from "../Login/Regex";
+import { validEmail} from "../Login/Regex";
+import { useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import "./Register.css";
 
-type RegisterFormProps = {
-  onRegister: (
-    First_name: string,
-    Last_name: string,
-    email: string,
-    password: string,
-    Confi_password: string,
-    acceptTerms: boolean,
-  ) => void;
-};
-
 // Register form here
-const RegisterForm :React.FC<RegisterFormProps> = ({ onRegister }) => {
+const RegisterForm: React.FC = () => {
   const [First_name, setFirst_name] = useState("");
   const [Last_name, setLast_name] = useState("");
   const [email, setEmail] = useState("");
@@ -37,6 +27,7 @@ const RegisterForm :React.FC<RegisterFormProps> = ({ onRegister }) => {
   const [Confi_password, setConfi_password] = useState("");
   const [acceptTerms,setAcceptTerms] = useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -47,8 +38,16 @@ const RegisterForm :React.FC<RegisterFormProps> = ({ onRegister }) => {
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    
     event.preventDefault();
+    const config = {
+      firstName : First_name,
+      lastName : Last_name,
+      email: email,
+      password: password,
+      confirmPassword:Confi_password
+    }
+    
+    
     if (!First_name && !Last_name && !email && !password && !Confi_password && !acceptTerms) {
       toast.error("Please Fill All the filed.", {
         transition: Flip,
@@ -164,8 +163,49 @@ const RegisterForm :React.FC<RegisterFormProps> = ({ onRegister }) => {
         theme: "dark",
       }); 
     }
-    
-    onRegister(First_name, Last_name, email, password, Confi_password,acceptTerms);
+    else if (First_name && Last_name && email && password && Confi_password && acceptTerms) {
+      fetch('https://coin-a-abhi6284.onrender.com/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(config)
+      })
+        .then((response) => {
+          if(response.status == 401){
+            navigate("/register");
+            toast.error("You are exiting User", {
+              transition: Flip,
+              position: "top-center",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+      
+              theme: "dark",
+            }); 
+          }
+          if(response.status == 200){
+            navigate("/");
+            toast.success("Registered successfully", {
+              transition: Flip,
+              position: "top-center",
+              autoClose: 2000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+      
+              theme: "dark",
+            }); 
+          }
+          return response.json()
+        })
+        .catch((error) => console.error(error));
+    }
   };  
 
   const ColorButton = styled(Button)<ButtonProps>(({ theme }) => ({

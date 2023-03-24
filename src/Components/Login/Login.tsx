@@ -13,32 +13,15 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { ToastContainer, toast, Flip } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { validEmail, validPassword } from "../Login/Regex";
+import { validEmail} from "../Login/Regex";
 import { useNavigate } from "react-router-dom";
-import axios, { AxiosResponse,AxiosError } from 'axios';
-
 import "./login.css";
 
-// Logic for Login
-interface LoginFormProps {
-  email: string,
-  password: string,
-};
-
-
 const LoginForm: React.FC = () => {
-  // const [formData, setFormData] = useState<LoginFormProps>({ email: '', password: '' });
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [emailErr, setEmailErr] = useState(false);
   const [showPassword, setShowPassword] = React.useState(false);
-  
 
-  // const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  //   // const { name, value } = event.target;
-  //   setFormData({ ...formData, [event.target.name]: event.target.value });
-  //   console.log(formData)
-  // };
   const navigate = useNavigate();
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -47,44 +30,55 @@ const LoginForm: React.FC = () => {
   ) => {
     event.preventDefault();
   };
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
+    const config = {
+      email: email,
+      password: password,
+    }
     if (email && password) {
-      try {
-        const config = {
-          email: email,
-          password: password,
+      fetch('https://coin-a-abhi6284.onrender.com/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(config)
+      })
+      .then((response) => {
+        if(response.status == 401){
+          navigate("/");
+          toast.error("Invalid Password", {
+            transition: Flip,
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+          }); 
         }
-
-        const response: AxiosResponse = await axios.post('https://coin-a-abhi6284.onrender.com/api/login', config);
-        console.log(response.data); 
-        // console.log(response.data.message);
-        
-        if (response.status === 201) {
+        if(response.status == 201){
           navigate("/Dashboard");
+          toast.success("Login successfully", {
+            transition: Flip,
+            position: "top-center",
+            autoClose: 2000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+    
+            theme: "dark",
+          }); 
         }
-        else{
-          
-        }
+        return response.json()
+      })
+        .catch((error) => console.error(error));
 
-      } catch (error) {
-        const err = error as AxiosError
-        console.log(err.response?.data)
-        toast.error(" "+err.response?.data, {
-          transition: Flip,
-          position: "top-center",
-          autoClose: 2000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-  
-          theme: "dark",
-        });
-        
-      }
+
     }
     if (!email && !password) {
       toast.error("Please fill in both Email and Password.", {
