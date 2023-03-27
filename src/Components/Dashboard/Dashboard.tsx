@@ -1,82 +1,104 @@
 import React from 'react';
-import { makeStyles, Theme } from '@material-ui/core/styles';
-import { Drawer, List, ListItem, ListItemIcon, ListItemText } from '@material-ui/core';
+import { Drawer, List } from '@material-ui/core';
 import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
 import { Box } from '@mui/system';
+import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
+import AccountBalanceWalletOutlinedIcon from '@mui/icons-material/AccountBalanceWalletOutlined';
+import ShoppingCartCheckoutIcon from '@mui/icons-material/ShoppingCartCheckout';
+import LogoutIcon from '@mui/icons-material/Logout';
+import Horizontal from '../Dashboard/Horizontal'
+import '../Dashboard/Dashboard.css'
 
-const drawerWidth = 237;
 
-const useStyles = makeStyles((theme: Theme) => ({
-    root: {
-        display: 'flex',
-    },
-    drawer: {
-        width: drawerWidth,
-        flexShrink: 0,
-    },
-    drawerPaper: {
-        width: drawerWidth,
-    },
-    toolbar: theme.mixins.toolbar,
-}));
+function HomeIcon(props: SvgIconProps) {
+    return (
+        <SvgIcon {...props}>
+            <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+        </SvgIcon>
+    );
+}
+
+
 
 const VerticalNavbar: React.FC = () => {
-    const classes = useStyles();
 
     return (
-        <div className={classes.root}>
-            <Drawer
-                className={classes.drawer}
-                variant="permanent"
-                classes={{
-                    paper: classes.drawerPaper,
-                }}
-            >
-                <div className={classes.toolbar} />
-                <List>
-                    {/* vertical Navbar : Dashboard */}
-                    <Box sx={{
-                        "& > :not(style)": {
-                            width: "197px",
-                            height: "54px",
-                            margin: "12px 0 0 0px",
-                            borderRadius: "8px",
-                            textTransform: 'none'
-                        },
+        <>
+            <div className='Horizontal-navbar'>
+                <Horizontal></Horizontal>
+            </div>
+            <Box sx={{
+                "& > :not(style)": {
+                                    backgroundColor:"white",
+                                    // boxShadow: 'rgba(0, 0, 0, 0.35) 0px 5px 15px',
+                                    boxShadow: '0px 15px 15px rgba(0, 0, 0, 0.5)',
+                                    height:'100vh',
+                                    width:'250px',
+                                },
 
-                    }}>
-                        <Button variant="contained" >Dashboard</Button>
-                    </Box>
-                    {/* Vertical Navbar : My Watchlist */}
-                    <Box sx={{
-                        "& > :not(style)": {
-                            width: "197px",
-                            height: "54px",
-                            margin: "12px 0 0 0px",
-                            borderRadius: "8px",
-                            textTransform: 'none'
-                        },
-                    }}>
-                        {/* Vertical Navbar : Order */}
-                        <Button variant="contained" >My Watchlist</Button>
-                    </Box>
-                    <Box sx={{
-                        "& > :not(style)": {
-                            width: "197px",
-                            height: "54px",
-                            margin: "12px 0 0 0px",
-                            borderRadius: "8px",
-                            textTransform: 'none',
-                            background:"#ffffff",
-                            color:"black"
-                        },
-                    }}>
-                        <Button variant="contained" >Orders</Button>
-                    </Box>
-                </List>
-            </Drawer>
-        </div>
+                            }}>
+                                  {/* vertical Navbar : Dashboard */}
+                            
+                        <List >
+                        <Box sx={{
+                                "& > :not(style)": {
+                                    width: "197px",
+                                    height: "54px",
+                                    margin: "12px 0px 0px 0px",
+                                    borderRadius: "8px",
+                                    textTransform: 'none'
+                                },
+
+                            }}>
+                                <Button variant="contained" ><HomeIcon fontSize="small" />&nbsp;&nbsp;Dashboard</Button>
+                            </Box>
+                          
+                            {/* Vertical Navbar : My Watchlist */}
+                            <Box sx={{
+                                "& > :not(style)": {
+                                    width: "197px",
+                                    height: "54px",
+                                    margin: '12px 0 0 0',
+                                    borderRadius: "8px",
+                                    textTransform: 'none',
+                                    background: "#ffffff",
+                                    color: "black"
+                                },
+                            }}>
+                                <Button variant="contained" ><AccountBalanceWalletOutlinedIcon fontSize="small" ></AccountBalanceWalletOutlinedIcon>&nbsp;&nbsp;My Watchlist</Button>
+                            </Box>
+                            {/* Vertical Navbar : Order */}
+                            <Box sx={{
+                                "& > :not(style)": {
+                                    width: "197px",
+                                    height: "54px",
+                                    margin: "12px 0 0 0px",
+                                    borderRadius: "8px",
+                                    textTransform: 'none',
+                                    background: "#ffffff",
+                                    color: "black"
+                                },
+                            }}>
+                                <Button variant="contained" ><ShoppingCartCheckoutIcon></ShoppingCartCheckoutIcon>&nbsp;&nbsp;Orders</Button>
+                            </Box>
+                            {/* Logout button */}
+                            <div className="Logout"></div>
+                            <Box sx={{
+                                "& > :not(style)": {
+                                    width: "197px",
+                                    height: "54px",
+
+                                    borderRadius: "8px",
+                                    textTransform: 'none',
+                                    background: "#ffffff",
+                                    color: "black"
+                                },
+                            }}>
+                                <Button variant="contained" ><LogoutIcon></LogoutIcon>&nbsp;&nbsp;Log out</Button>
+                            </Box>
+                        </List>
+                        </Box>
+        </>
     );
 };
 
