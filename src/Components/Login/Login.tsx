@@ -19,6 +19,7 @@ import "./login.css";
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");
+  const [login,Islogin] = useState(false);
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = React.useState(false);
 
@@ -60,6 +61,7 @@ const LoginForm: React.FC = () => {
           }); 
         }
         if(response.status == 201){
+          Islogin(true)
           navigate("/Dashboard");
           toast.success("Login successfully", {
             transition: Flip,
