@@ -46,24 +46,13 @@ const LoginForm: React.FC = () => {
         body: JSON.stringify(config)
       })
       .then((response) => {
-        if(response.status == 401){
-          navigate("/");
-          toast.error("Invalid Password", {
-            transition: Flip,
-            position: "top-center",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "dark",
-          }); 
-        }
         if(response.status == 201){
-          Islogin(true)
-          navigate("/Dashboard");
-          toast.success("Login successfully", {
+          navigate("/");  
+        }
+        if(response.status == 401){
+        //   Islogin(true)
+          navigate("/login");
+          toast.success("Invalid Password", {
             transition: Flip,
             position: "top-center",
             autoClose: 2000,
