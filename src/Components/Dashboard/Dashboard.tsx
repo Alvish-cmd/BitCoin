@@ -8,7 +8,7 @@ import Button from '@mui/material/Button'
 
 
 interface dataObj {
-    market: string;
+market: string;
 change_24_hour: number;
 low: number;
 high: number;
@@ -60,7 +60,8 @@ const columns = [
     
     export default function Dashboard() {
     const [cPrice , setCPrice] = useState<dataObj[]>([])
-    const Price = async () => {
+    const Price = async () => 
+    {
         const response = await fetch(
         "https://api.wazirx.com/sapi/v1/tickers/24hr",
         {
@@ -73,7 +74,7 @@ const columns = [
         );
         const data = await response.json();
         setCPrice(data);
-        }; 
+    }; 
         useEffect(() => {
         let interval = setInterval(() => {
         Price();
@@ -87,12 +88,20 @@ const columns = [
     <Horizontal></Horizontal>
     <Vertical></Vertical>
     <div style={{ height: 400, width: '100vw'}}>
-       <DataGrid
+       <DataGrid 
             rows={cPrice}
             columns={columns}
-            getRowId={(row: any) =>  row.baseAsset + row.openPrice + row.lowPrice + row.highPrice + row.volume + row.bidPrice}
+            getRowId={(row: any) =>  row.baseAsset + `${row.openPrice}` + row.lowPrice + row.highPrice + row.volume + row.bidPrice}
          />
     </div>
     </>
   );
 }
+
+// const data = [
+//   { x: new Date(2021, 1, 1), high: 100, low: 80, open: 90, close: 95 },
+//   { x: new Date(2021, 1, 2), high: 110, low: 90, open: 100, close: 100 },
+//   { x: new Date(2021, 1, 3), high: 120, low: 300, open: 30, close: 115 },
+//   { x: new Date(2021, 1, 4), high: 130, low: 0, open: 115, close: 120 },
+//   { x: new Date(2021, 1, 5), high: 140, low: 120, open: 120, close: 135 }
+// ];
